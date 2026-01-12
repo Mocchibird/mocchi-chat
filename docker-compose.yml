@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  mocchibird:
+    build: .
+    container_name: mocchibird-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./training_data:/app/training_data
+    networks:
+      - mocchibird-network
+
+networks:
+  mocchibird-network:
+    driver: bridge

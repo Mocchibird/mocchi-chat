@@ -89,8 +89,26 @@ A friendly Discord bot powered by AI that you can chat with. Mocchibird responds
 
 ### Running the Bot
 
+**Standard Python:**
 ```bash
 python bot.py
+```
+
+**Using the quick start script (Linux/Mac):**
+```bash
+./start.sh
+```
+
+**Using Docker:**
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# View logs
+docker-compose logs -f mocchibird
+
+# Stop the bot
+docker-compose down
 ```
 
 The bot will connect to Discord and start responding to mentions.
@@ -211,18 +229,17 @@ Once you have prepared training data, you can use it to fine-tune models:
 
 Ollama supports creating custom models with `Modelfile`:
 
-1. Create a `Modelfile`:
-   ```
-   FROM llama2
-   SYSTEM "You are Mocchibird, a friendly AI assistant..."
-   ```
-
-2. Create the model:
+1. Use the provided `Modelfile`:
    ```bash
    ollama create mocchibird -f Modelfile
    ```
 
-3. Update `MODEL_NAME` in `.env` to `mocchibird`
+2. Update `MODEL_NAME` in `.env` to `mocchibird`
+
+3. Verify the model was created:
+   ```bash
+   ollama list
+   ```
 
 ## Project Structure
 
