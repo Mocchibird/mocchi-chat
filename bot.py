@@ -138,16 +138,15 @@ async def on_message(message):
     
     # Check if bot was mentioned
     if bot.user in message.mentions:
+        # Remove the mention from the message content
+        content = message.content.replace(f'<@{bot.user.id}>', '').replace(f'<@!{bot.user.id}>', '').strip()
+        
+        if not content:
+            content = "Hello!"
+        
         # Show typing indicator if configured
         if config.get('response', {}).get('typing_indicator', True):
             async with message.channel.typing():
-                # Remove the mention from the message content
-                content = message.content.replace(f'<@{bot.user.id}>', '').strip()
-                content = message.content.replace(f'<@!{bot.user.id}>', '').strip()
-                
-                if not content:
-                    content = "Hello!"
-                
                 # Generate response
                 response = await generate_response(
                     content, 
@@ -163,12 +162,6 @@ async def on_message(message):
                     await message.channel.send(response)
         else:
             # Without typing indicator
-            content = message.content.replace(f'<@{bot.user.id}>', '').strip()
-            content = message.content.replace(f'<@!{bot.user.id}>', '').strip()
-            
-            if not content:
-                content = "Hello!"
-            
             response = await generate_response(
                 content, 
                 message.channel.id,

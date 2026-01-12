@@ -226,10 +226,9 @@ def main():
         try:
             conversations = preparer.load_conversations_from_file(filepath)
             
-            # Load system prompt from config
-            with open('config.yaml', 'r') as f:
-                config = yaml.safe_load(f)
-                system_prompt = config.get('system_prompt')
+            # Load system prompt from config using the class's config_path
+            updater = ConfigUpdater()
+            system_prompt = updater.config.get('system_prompt')
             
             examples = preparer.prepare_from_conversations(conversations, system_prompt)
             preparer.prepare_training_file(examples)
@@ -264,7 +263,11 @@ def main():
                 value = input(f"{param}: ").strip()
                 if value:
                     try:
-                        params[param] = float(value) if '.' in value else int(value)
+                        # Try float first (works for both int and float)
+                        params[param] = float(value)
+                        # Convert to int if it's a whole number and param expects int
+                        if param == 'max_tokens' and params[param].is_integer():
+                            params[param] = int(params[param])
                     except ValueError:
                         print(f"Invalid value for {param}, skipping")
             
